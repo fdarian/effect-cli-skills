@@ -48,13 +48,13 @@ The macro runs under `bun src/main.ts` and `bun build --compile`; the files are 
 
 ## Commands
 
-| Command | Output |
-| --- | --- |
-| `mycli skills` / `skills list` | `name  description` table on a terminal; NDJSON `{name, description}` when piped or with `--json` |
-| `skills get <name>` | SKILL.md without frontmatter, then the paths of the skill's other files |
-| `skills get <name> --file <path>` | that file's raw bytes (binary-safe); absolute paths and `..` are rejected |
-| `skills get <name> --full` | SKILL.md plus every `references/**/*.md`, each under a `# reference: <name>` header |
-| `skills stub <name>` | a short SKILL.md (`name: mycli-<name>`) telling an agent to run `mycli skills get <name>`; save it under `.claude/skills/` |
+| Command                           | Output                                                                                                                     |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `mycli skills` / `skills list`    | `name  description` table on a terminal; NDJSON `{name, description}` when piped or with `--json`                          |
+| `skills get <name>`               | SKILL.md without frontmatter, then the paths of the skill's other files                                                    |
+| `skills get <name> --file <path>` | that file's raw bytes (binary-safe); absolute paths and `..` are rejected                                                  |
+| `skills get <name> --full`        | SKILL.md plus every `references/**/*.md`, each under a `# reference: <name>` header                                        |
+| `skills stub <name>`              | a short SKILL.md (`name: mycli-<name>`) telling an agent to run `mycli skills get <name>`; save it under `.claude/skills/` |
 
 ## Errors
 
