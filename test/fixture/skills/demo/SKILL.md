@@ -1,4 +1,5 @@
 ---
+
 name: demo
 description: "Use when testing: a skill with references, scripts and a binary asset"
 ---
