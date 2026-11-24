@@ -69,8 +69,20 @@ const failure = (result: Awaited<ReturnType<typeof run>>) => {
 };
 
 describe('skills list', () => {
-	test('prints NDJSON when stdout is not a terminal', async () => {
+	test('prints an aligned text table when piped', async () => {
 		const result = await run([]);
+		expect(Exit.isSuccess(result.exit)).toBe(true);
+		expect(result.stdout).toBe(
+			[
+				'demo   Use when testing: a skill with references, scripts and a binary asset',
+				'other  A second skill with no extra files',
+				'',
+			].join('\n'),
+		);
+	});
+
+	test('--json prints NDJSON, before or after the subcommand', async () => {
+		const result = await run(['list', '--json']);
 		expect(Exit.isSuccess(result.exit)).toBe(true);
 		const records = result.stdout
 			.trim()
@@ -84,23 +96,16 @@ describe('skills list', () => {
 			},
 			{ name: 'other', description: 'A second skill with no extra files' },
 		]);
+		for (const args of [['--json', 'list'], ['--json']]) {
+			expect((await run(args)).stdout).toBe(result.stdout);
+		}
 	});
 
-	test('prints an aligned table on a terminal', async () => {
-		const result = await run(['list'], { tty: true });
-		expect(result.stdout).toBe(
-			[
-				'demo   Use when testing: a skill with references, scripts and a binary asset',
-				'other  A second skill with no extra files',
-				'',
-			].join('\n'),
-		);
-	});
-
-	test('--json forces NDJSON on a terminal, before or after the subcommand', async () => {
-		const piped = await run([]);
-		for (const args of [['list', '--json'], ['--json', 'list'], ['--json']]) {
-			expect((await run(args, { tty: true })).stdout).toBe(piped.stdout);
+	test('output is the same on a terminal and when piped', async () => {
+		for (const args of [['list'], [], ['list', '--json']]) {
+			const piped = await run(args, { tty: false });
+			const terminal = await run(args, { tty: true });
+			expect(terminal.stdout).toBe(piped.stdout);
 		}
 	});
 
@@ -111,7 +116,7 @@ describe('skills list', () => {
 				'b/notes.txt': base64('x'),
 			},
 		});
-		expect(result.stdout).toBe('{"name":"a","description":"A"}\n');
+		expect(result.stdout).toBe('a  A\n');
 	});
 });
 

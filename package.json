@@ -1,6 +1,6 @@
 {
 	"name": "effect-cli-skills",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "A read-only `skills` command for Effect v4 CLIs: ship agent skills inside your binary",
 	"type": "module",
 	"license": "MIT",
@@ -13,6 +13,7 @@
 		"src",
 		"!src/**/*.test.ts",
 		"README.md",
+		"CHANGELOG.md",
 		"LICENSE"
 	],
 	"scripts": {

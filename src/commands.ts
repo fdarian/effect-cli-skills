@@ -149,7 +149,7 @@ export const skills = (options: SkillsOptions) => {
 	const base = Command.make('skills').pipe(
 		Command.withSharedFlags({
 			json: Flag.Boolean('json').pipe(
-				Flag.withDescription('print NDJSON even on a terminal'),
+				Flag.withDescription('print NDJSON instead of text'),
 				Flag.withDefault(false),
 			),
 		}),
@@ -157,26 +157,23 @@ export const skills = (options: SkillsOptions) => {
 
 	const list = (json: boolean) =>
 		Effect.gen(function* () {
-			const stdio = yield* Stdio.Stdio;
 			const names = yield* (yield* SkillSource).names;
 			const summaries = yield* Effect.forEach(names, loadSkill);
-			if (!json && (yield* stdio.stdoutIsTerminal)) {
-				const width = Math.max(...summaries.map((skill) => skill.name.length));
+			if (json) {
 				yield* write(
 					summaries
 						.map(
-							(skill) => `${skill.name.padEnd(width)}  ${skill.description}\n`,
+							(skill) =>
+								`${JSON.stringify({ name: skill.name, description: skill.description })}\n`,
 						)
 						.join(''),
 				);
 				return;
 			}
+			const width = Math.max(...summaries.map((skill) => skill.name.length));
 			yield* write(
 				summaries
-					.map(
-						(skill) =>
-							`${JSON.stringify({ name: skill.name, description: skill.description })}\n`,
-					)
+					.map((skill) => `${skill.name.padEnd(width)}  ${skill.description}\n`)
 					.join(''),
 			);
 		});
@@ -189,7 +186,7 @@ export const skills = (options: SkillsOptions) => {
 	).pipe(
 		Command.withShortDescription(`list the skills shipped with ${options.cli}`),
 		Command.withDescription(
-			'One line per skill: `name  description` on a terminal, NDJSON `{name, description}` when piped or with --json.',
+			'One line per skill as `name  description`, or NDJSON `{name, description}` with --json.',
 		),
 	);
 

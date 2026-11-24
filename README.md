@@ -50,7 +50,7 @@ The macro runs under `bun src/main.ts` and `bun build --compile`; the files are 
 
 | Command                           | Output                                                                                                                     |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `mycli skills` / `skills list`    | `name  description` table on a terminal; NDJSON `{name, description}` when piped or with `--json`                          |
+| `mycli skills` / `skills list`    | `name  description` table; NDJSON `{name, description}` with `--json`                                                      |
 | `skills get <name>`               | SKILL.md without frontmatter, then the paths of the skill's other files                                                    |
 | `skills get <name> --file <path>` | that file's raw bytes (binary-safe); absolute paths and `..` are rejected                                                  |
 | `skills get <name> --full`        | SKILL.md plus every `references/**/*.md`, each under a `# reference: <name>` header                                        |

@@ -72,8 +72,18 @@ for (const [label, command] of Object.entries(targets)) {
 			expect(text(result.stdout)).toContain('- assets/big.bin');
 		});
 
-		test('skills list is NDJSON when piped', async () => {
+		test('skills list is text when piped', async () => {
 			const result = await exec([...command(), 'skills']);
+			const names = text(result.stdout)
+				.trim()
+				.split('\n')
+				.map((line) => line.split(/\s+/)[0]);
+			expect(names).toEqual(['demo', 'other']);
+			expect(text(result.stdout)).not.toContain('{');
+		});
+
+		test('skills list --json is NDJSON', async () => {
+			const result = await exec([...command(), 'skills', 'list', '--json']);
 			const names = text(result.stdout)
 				.trim()
 				.split('\n')
